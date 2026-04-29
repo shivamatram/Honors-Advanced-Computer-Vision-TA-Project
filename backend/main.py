@@ -168,13 +168,21 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+@app.get("/")
+async def root():
+    """Root endpoint to verify server is running."""
+    return {
+        "message": "EmotiSense AI Backend is Running",
+        "endpoints": ["/ws", "/health"]
+    }
+
 @app.get("/health")
 async def health_check():
     """Health check endpoint."""
     return {
         "status": "healthy",
         "service": "EmotiSense AI",
-        "face_detector": "haar_cascade",
+        "face_detector": "retinaface",
         "emotion_model": "deepface",
     }
 

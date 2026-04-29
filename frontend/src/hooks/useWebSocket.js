@@ -5,7 +5,14 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 
 // Use environment variable for production, fallback to localhost for development
-const WS_URL = import.meta.env.VITE_WS_URL || 'ws://localhost:8000/ws';
+let baseWsUrl = import.meta.env.VITE_WS_URL || 'ws://localhost:8000/ws';
+
+// Robustness: Ensure the URL ends with /ws if not already present
+if (!baseWsUrl.endsWith('/ws') && !baseWsUrl.includes('/ws?')) {
+  baseWsUrl = baseWsUrl.endsWith('/') ? `${baseWsUrl}ws` : `${baseWsUrl}/ws`;
+}
+
+const WS_URL = baseWsUrl;
 const RECONNECT_DELAY_BASE = 1000;
 const MAX_RECONNECT_DELAY = 10000;
 
